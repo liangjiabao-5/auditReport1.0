@@ -1,0 +1,503 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard3 {% endblock %} 
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} sidebar-mini {% endblock body_class %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+
+  <!-- Select2 -->
+  <link rel="stylesheet" href="/static/assets/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="/static/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  <!-- jsGrid -->
+  <link rel="stylesheet" href="/static/assets/plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="/static/assets/plugins/jsgrid/jsgrid-theme.min.css">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="/static/assets/plugins/toastr/toastr.min.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="/static/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+
+{% endblock stylesheets %}
+
+{% block content %}    
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">结果记录审核</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">结果记录审核</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+
+          <!-- SELECT2 EXAMPLE -->
+          <div class="card card-default">
+
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label>请选择模型</label>
+                    <select class="form-control select2" style="width: 100%;" id="modelName">
+                      <option>glm4</option>
+                      <option>qwen</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label></label>
+                        <button type="button" class="btn btn-block btn-primary" style="margin-top: 8px;" id="loadModel">加载模型</button>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                  <div class="form-group">
+                      <label></label>
+                      <button type="button" class="btn btn-block btn-danger" style="margin-top: 8px;" id="unloadModel">卸载模型</button>
+                  </div>
+              </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>请选择作业指导书</label>
+                      <select class="form-control select2" style="width: 100%;" id="securityClass">
+                        <option>安全运维管理</option>
+                        <option>安全物理环境</option>
+                        <option>安全通信网络</option>
+                        <option>安全区域边界</option>
+                        <option>安全建设管理</option>
+                        <option>安全管理中心</option>
+                        <option>安全管理制度</option>
+                        <option>安全管理人员</option>
+                        <option>安全管理机构</option>
+                        <option>04卓识-安全计算环境-S3A3G3-现场作业指导书（MySQL数据库）A3.4</option>
+                          <option>04卓识-安全计算环境-S3A3G3-现场作业指导书（RedHat 6.5操作系统）A3.4</option>
+                          <option>04卓识-安全计算环境-S3A3G3-现场作业指导书（Windows 7操作系统）A3.4</option>
+                          <option>04卓识-安全计算环境-S3A3G3-现场作业指导书（迪普防火墙）A3.4</option>
+                          <option>04卓识-安全计算环境-S3A3G3-现场作业指导书（华为交换机）A3.4</option>
+                          <option>04卓识-安全计算环境-S3A3G3-现场作业指导书（南瑞单向隔离）A3.4</option>
+                          <option>04卓识-安全计算环境-S3A3G3-现场作业指导书（凝思V6.0操作系统）A3.4</option>
+                          <option>04卓识-安全计算环境-S3A3G3-现场作业指导书（应用系统）A3.4</option>
+                          <option>11卓识-工业控制系统测评扩展要求-现场作业指导书A2.0</option>
+                      </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>请选择项目</label>
+                      <select class="form-control select2" style="width: 100%;">
+                        <option>xxx</option>
+                        <option>xxx</option>
+                      </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="customFile">上传审核文件</label>
+
+                        <div class="input-group">
+                            <div class="custom-file">
+                              <input type="file" class="custom-file-input" id="exampleInputFile">
+                              <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                            </div>
+                            <div class="input-group-append">
+                              <span class="input-group-text" id="UploadFile">Upload</span>
+                            </div>
+                        </div>
+
+                        <!-- <form id="customFile" method="post" enctype="multipart/form-data">
+                            <input type="file" name="file" required>
+                            <button type="submit" >Upload</button>
+                        </form> -->
+                    </div>
+                </div>
+                
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label></label>
+                        <button type="button" class="btn btn-block btn-primary" style="margin-top: 8px;" id="startReview">开始审核</button>
+                    </div>
+                </div>
+
+              </div>
+            
+            <!-- 多框 -->
+            <div class="row">
+                <div class="col-md-12">
+                <div class="card card-primary card-tabs">
+                    <div class="card-header p-0 pt-1">
+                    <ul class="nav nav-tabs" id="custom-tabs-five-tab" role="tablist">
+                        <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-five-overlay-tab" data-toggle="pill" href="#custom-tabs-five-overlay" role="tab" aria-controls="custom-tabs-five-overlay" aria-selected="true">模型加载</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-five-overlay-dark-tab" data-toggle="pill" href="#custom-tabs-five-overlay-dark" role="tab" aria-controls="custom-tabs-five-overlay-dark" aria-selected="false">Overlay Dark</a>
+                        </li> -->
+                        <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-five-normal-tab" data-toggle="pill" href="#custom-tabs-five-normal" role="tab" aria-controls="custom-tabs-five-normal" aria-selected="false">审核表格</a>
+                        </li>
+                    </ul>
+                    </div>
+                    <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-five-tabContent">
+                        <div class="tab-pane fade show active" id="custom-tabs-five-overlay" role="tabpanel" aria-labelledby="custom-tabs-five-overlay-tab">
+                            <div class="overlay-wrapper">
+                                <div class="overlay"  id="loadingOverlay" style="display: none;">
+                                    <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+                                    <div class="text-bold pt-2">Loading...</div>
+                                </div>
+                                <div id="dataOutput"></div>
+                            </div>
+                        </div>
+                        <!-- <div class="tab-pane fade" id="custom-tabs-five-overlay-dark" role="tabpanel" aria-labelledby="custom-tabs-five-overlay-dark-tab">
+                            <div class="overlay-wrapper">
+                                <div class="overlay dark"><i class="fas fa-3x fa-sync-alt fa-spin"></i><div class="text-bold pt-2">Loading...</div></div>
+                                Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                            </div>
+                        </div> -->
+                        <div class="tab-pane fade" id="custom-tabs-five-normal" role="tabpanel" aria-labelledby="custom-tabs-five-normal-tab">
+                            <div  class="jsgrid-container">
+                                <div id="jsGrid1"></div>
+    
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                </div>
+            </div>
+
+
+              <!-- <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">审核表格</h3>
+                    </div>
+
+                    <div  class="jsgrid-container">
+                        <div id="jsGrid1"></div>
+                        
+                    </div>
+ 
+                  </div>
+                </div>
+              </div> -->
+
+            </div>
+            <!-- /.card-body -->
+            <!-- <div class="card-footer">
+              Visit <a href="https://select2.github.io/">Select2 documentation</a> for more examples and information about
+              the plugin.
+            </div> -->
+          </div>
+          </div>
+          <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- jQuery -->
+  <script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="/static/assets/js/adminlte.js"></script>
+
+  <!-- OPTIONAL SCRIPTS -->
+  <script src="/static/assets/plugins/chart.js/Chart.min.js"></script>
+  <script src="/static/assets/js/demo.js"></script>
+  <script src="/static/assets/js/pages/dashboard3.js"></script>
+
+    <!-- Select2 -->
+    <script src="/static/assets/plugins/select2/js/select2.full.min.js"></script>
+      <!-- jsGrid -->
+  <script src="/static/assets/plugins/jsgrid/demos/db.js"></script>
+  <script src="/static/assets/plugins/jsgrid/jsgrid.min.js"></script>
+  <!-- Toastr -->
+  <script src="/static/assets/plugins/toastr/toastr.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="/static/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- 引入 autosize.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/4.0.2/autosize.min.js"></script>
+
+  <!-- page script -->
+  <script>
+    let filename = null;
+    let modelname = null;
+    document.getElementById('UploadFile').onclick = async (e) => {
+            // 获取文件输入元素
+            var fileInput = document.getElementById('exampleInputFile');
+            
+            // 检查是否有文件被选中
+            if (fileInput.files.length === 0) {
+                alert('请先选择一个文件');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            // 创建时间戳
+            const options = { 
+                timeZone: 'Asia/Shanghai', 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false 
+            };
+
+            const now = new Date();
+            const timestamp = now.toLocaleString('zh-CN', options).replace(/\D/g, '');
+
+            formData.append('timestamp', timestamp);
+        
+            const response = await fetch('/uploadReview', {
+                method: 'POST',
+                body: formData,
+            });
+            const json = await response.json();
+            filename = json.filename
+            $("#jsGrid1").jsGrid({
+                height: "100%",
+                width: "100%",
+
+                sorting: true,
+                paging: true,
+                pageSize: 10,
+
+                data: json.data,
+                fields: [
+                    { name: "report_id", type: "number", width: 35, title: "报告号"},
+                    { name: "obj_type", type: "text", width: 60, title: "测评对象类型" },
+                    { name: "style_name", type: "text", width: 40, title: "测评类型" },
+                    { name: "security_class", type: "text", width: 65, title: "安全类" },
+                    { name: "detail", type: "text", width: 200, title: "测评指标" },
+                    { name: "result_record", type: "text",  width: 300, title: "结果记录" },
+                    { name: "result_score", type: "text", width: 40, title: "符合情况" }
+                ]
+            });
+            autosize(document.querySelectorAll('jsGrid1'));
+
+        };
+
+        document.getElementById('loadModel').onclick = async (e) => {
+            // 获取文件输入元素
+            var selectElement  = document.getElementById('modelName');
+
+            // 获取被选中的 option 的值
+            var selectedValue = selectElement.value;
+            
+            modelname = selectedValue
+
+            // 显示加载指示器
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const dataOutput = document.getElementById('dataOutput');
+            loadingOverlay.style.display = 'flex';
+            // loadingOverlay.style.justifyContent = 'center';
+            // loadingOverlay.style.display = 'block';
+            // loadingOverlay.style.display = 'block';
+            dataOutput.innerHTML = ''; // 清空之前的输出
+
+            // 创建一个 EventSource 对象来监听服务器事件
+            const eventSource = new EventSource(`/streamLoadModel?modelName=${selectedValue}`);
+
+            // 当接收到消息时更新页面
+            eventSource.onmessage = function(event) {
+                // 解析并处理来自服务器的消息
+                // console.log(`New message: ${event.data}`);
+                if (event.data.includes("http://0.0.0.0:8000") ){
+                  loadingOverlay.style.display = 'none';
+                }
+                // 更新DOM，将消息添加到日志区域
+                const line = document.createElement('p');
+                line.textContent = event.data;
+                dataOutput.appendChild(line);
+            };
+
+            // 处理关闭连接的情况
+            eventSource.onerror = function() {
+                console.error('EventSource failed.');
+                eventSource.close();
+                // 隐藏加载指示器
+                loadingOverlay.style.display = 'none';
+            };
+
+            // 当所有数据接收完毕后，也可以通过特定的消息来隐藏加载指示器
+            eventSource.addEventListener('complete', function() {
+                // 隐藏加载指示器
+                loadingOverlay.style.display = 'none';
+                // console.log('All data has been received.');
+            });
+
+        };
+
+        document.getElementById('unloadModel').onclick = async (e) => {
+            
+            // 获取文件输入元素
+            var selectElement  = document.getElementById('modelName');
+
+            // 获取被选中的 option 的值
+            var selectedValue = selectElement.value;
+
+            var Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000
+            });
+            
+            // 构建查询字符串（如果需要传递参数）
+            const params = new URLSearchParams({
+                // 假设你需要传递一些参数
+                modelName: selectedValue
+            });
+
+            // 发起 GET 请求
+            const response = await fetch(`/unloadModel?${params.toString()}`, {
+                method: 'GET', // 指定请求方法为 GET
+            });
+
+            // 检查响应是否成功
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            // 解析并获取 JSON 数据
+            const data = await response.json();
+            Toast.fire({
+              icon: 'success',
+              title: data
+            })
+
+        };
+        document.getElementById('startReview').onclick = async (e) => {
+            var Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000
+            });
+
+            // 获取文件输入元素
+            var selectElement  = document.getElementById('securityClass');
+
+            // 获取被选中的 option 的值
+            var selectedValue = selectElement.value;
+
+            if (filename === null) {
+                Toast.fire({
+                  icon: 'error',
+                  title: "请上传审核文件"
+                })
+            }
+            
+            // 构建查询字符串（如果需要传递参数）
+            const params = new URLSearchParams({
+                // 假设你需要传递一些参数
+                modelName: modelname,
+                fileName: filename,
+                securityClass: selectedValue
+            });
+
+            // 发起 GET 请求
+            const response = await fetch(`/startReview?${params.toString()}`, {
+                method: 'GET', // 指定请求方法为 GET
+            });
+            
+            // 检查响应是否成功
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            // 解析并获取 JSON 数据
+            const data = await response.json();
+            Toast.fire({
+              icon: 'success',
+              title: data
+            })
+
+
+        };
+    // document.addEventListener('DOMContentLoaded', async () => {
+    //     window.difyChatbotConfig = {
+    //         token: 'vdQPnNL9cp8dF7vI',
+    //         baseUrl: 'http://139.196.47.167:8000'
+    //     }
+    //     const script = document.createElement('script')
+    //     script.src="http://139.196.47.167:8000/embed.min.js"
+    //     script.id="vdQPnNL9cp8dF7vI"
+    //     script.defer=true
+    //     document.head.appendChild(script)
+    // });
+    
+  </script>
+
+<!-- <script
+ src="http://139.196.47.167:8000/embed.min.js"
+ id="vdQPnNL9cp8dF7vI"
+ defer>
+</script> -->
+
+<style>
+    .jsgrid-container {
+        overflow: hidden; /* 隐藏所有滚动条 */
+    }
+
+    .jsgrid-container .jsgrid-grid-body {
+        overflow-y: hidden !important; /* 确保 jsGrid 内部的滚动条也被隐藏 */
+    }
+    .jsgrid-container .jsgrid-grid-header {
+        overflow-y: hidden !important; /* 确保 jsGrid 内部的滚动条也被隐藏 */
+    }
+    
+    
+/*     #dify-chatbot-bubble-button {
+        background-color: #1C64F2 !important;
+    }
+    #dify-chatbot-bubble-window {
+        width: 24rem !important;
+        height: 40rem !important;
+    } */
+</style>
+{% endblock javascripts %}

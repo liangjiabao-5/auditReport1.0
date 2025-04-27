@@ -1,0 +1,631 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard3 {% endblock %} 
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} sidebar-mini {% endblock body_class %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+
+  <!-- Select2 -->
+  <link rel="stylesheet" href="/static/assets/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="/static/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  <!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+
+{% endblock stylesheets %}
+
+{% block content %}    
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">二次审核</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">二次审核</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+          <!-- SELECT2 EXAMPLE -->
+          <div class="card card-default">
+
+            <!-- <div class="card-header">
+              <h3 class="card-title">Select2 (Default Theme)</h3>
+  
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div> -->
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label>请选择审核结果文件</label>
+                    <select class="form-control select2" style="width: 100%;" id="selectFile">
+                      <option>xxx</option>
+                      <option>xxx</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-1.5">
+                    <div class="form-group">
+                        <label></label>
+                        <button type="button" class="btn btn-block btn-primary" style="margin-top: 8px;" id="selectResult">查看审核结果</button>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>请选择筛选项</label>
+                      <select class="form-control select2" style="width: 100%;">
+                        <option>安全运维管理</option>
+                        <option>安全物理环境</option>
+                      </select>
+                    </div>
+                </div>
+
+                
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label></label>
+                        <button type="button" class="btn btn-block btn-primary" style="margin-top: 8px;">筛选</button>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label></label>
+                        <button type="button" class="btn btn-block btn-primary" style="margin-top: 8px;" id="filterProblemItems">筛选问题项</button>
+                    </div>
+                </div>
+                  
+              </div>
+                
+              <!-- 模糊窗口 -->
+              <div class="modal fade" id="modal-back">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">退回详情</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <label>请选择模型结果作为退回参考</label>
+                        <select class="form-control select2" style="width: 100%;">
+                          <option>glm4</option>
+                          <option>qwen</option>
+                        </select>
+                        <label>输入原因</label>
+                        <textarea class="form-control"  placeholder="Enter ..." id="inputText"></textarea>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                      <button type="button" class="btn btn-primary">确定</button>
+                    </div>
+                  </div>
+                  <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+              </div>
+                
+              <!-- 模糊窗口 -->
+              <div class="modal fade" id="modal-verificat">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">校验详情</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <label>请选择校验结果</label>
+                        <select class="form-control select2" style="width: 100%;">
+                          <option>符合</option>
+                          <option>不符合</option>
+                          <option>部分符合</option>
+                          <option>不适用</option>
+                        </select>
+                        <label>输入原因</label>
+                        <textarea class="form-control"  placeholder="Enter ..." id="inputText"></textarea>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                      <button type="button" class="btn btn-primary">确定</button>
+                    </div>
+                  </div>
+                  <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">审核表格</h3>
+                    </div>
+                    <!-- ./card-header -->
+<!--                     <div  class="jsgrid-container">
+                        <div id="jsGrid1"></div>
+                        
+                    </div> -->
+                    <!-- /.card-body -->
+                    <table id="dynamicTable" class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>报告ID</th>
+                          <th>测评对象类型</th>
+                          <th>扩展类型</th>
+                          <th>安全类</th>
+                          <th>测评项</th>
+                          <th>结果记录</th>
+                          <th>结果</th>
+                          <th>Qwen 结果</th>
+                          <th>GLM4 结果</th>
+                          <th>退回</th>
+                          <th>校验</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- 动态生成的表格内容将插入到这里 -->
+                      </tbody>
+                    </table>
+                  <!-- /.card -->
+                </div>
+              </div>
+
+            </div>
+            <!-- /.card-body -->
+            <!-- <div class="card-footer">
+              Visit <a href="https://select2.github.io/">Select2 documentation</a> for more examples and information about
+              the plugin.
+            </div> -->
+          </div>
+          </div>
+          <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- jQuery -->
+  <script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE -->
+  <script src="/static/assets/js/adminlte.js"></script>
+
+  <!-- OPTIONAL SCRIPTS -->
+  <script src="/static/assets/plugins/chart.js/Chart.min.js"></script>
+  <script src="/static/assets/js/demo.js"></script>
+  <script src="/static/assets/js/pages/dashboard3.js"></script>
+
+  <!-- Select2 -->
+  <script src="/static/assets/plugins/select2/js/select2.full.min.js"></script>
+  <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<!-- page script -->
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // 发送请求以获取.xlsx文件列表
+        const response = await fetch('/getReviewFiles', {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        const files = await response.json();
+        const select = document.getElementById('selectFile');
+
+        // 清空原有的选项
+        select.innerHTML = '';
+
+        // 如果有文件名，则为每个文件名创建一个<option>元素
+        if (files.length > 0) {
+            files.forEach(fileName => {
+                const option = document.createElement('option');
+                option.value = fileName;
+                option.textContent = fileName;
+                select.appendChild(option);
+            });
+        } else {
+            // 如果没有找到任何文件，可以显示一个提示信息
+            const noOption = document.createElement('option');
+            noOption.value = '';
+            noOption.textContent = '没有找到可用文件';
+            select.appendChild(noOption);
+        }
+
+        // 初始化Select2插件（如果需要）
+        $(select).select2();
+
+    } catch (error) {
+        console.error('Error fetching file list:', error);
+        alert('加载文件列表时发生错误，请稍后再试。');
+    }
+});
+
+// // 或者绑定到某个元素的事件上
+// document.getElementById('yourButtonId').addEventListener('click', function () {
+//   var myModal = new bootstrap.Modal(document.getElementById('modal-default'));
+//   myModal.show();
+// });
+document.getElementById('selectResult').onclick = async (e) => {
+  e.preventDefault(); // 阻止默认行为
+
+  // 获取文件输入元素
+  const selectElement = document.getElementById('selectFile');
+
+  // 获取被选中的 option 的值
+  const filename = selectElement.value;
+  console.log(filename);
+
+  // 构建查询字符串（如果需要传递参数）
+  const params = new URLSearchParams({
+    fileName: filename
+  });
+
+  try {
+    // 发送请求获取.xlsx文件列表
+    const response = await fetch(`/selectResult?${params.toString()}`, {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    // 清空现有表格内容
+    const tableBody = document.querySelector('#dynamicTable tbody');
+    tableBody.innerHTML = '';
+
+    // 动态生成表格内容
+    data.forEach((item, index) => {
+      const row = document.createElement('tr');
+
+      // 创建标准列
+      ['report_id', 'obj_type', 'style_name', 'security_class', 'detail', 'result_record', 'result_score'].forEach(key => {
+        const cell = document.createElement('td');
+        cell.textContent = item[key] || '';
+        row.appendChild(cell);
+      });
+        
+        
+           // 创建 qwen 结果与原因 (可展开)
+      const qwenCell = document.createElement('td');
+      const qwenResult = document.createElement('span');
+        qwenResult.style = "display: flex;justify-content: center;"
+      qwenResult.textContent = item['qwen_result'] || '';
+      qwenCell.appendChild(qwenResult);
+
+      // 创建 Qwen 原因 (可展开)
+      // const qwenReasonCell = document.createElement('td');
+      const qwenExpandButton = document.createElement('button');
+      qwenExpandButton.type = 'button';
+        qwenExpandButton.style = "width: 58px;margin-top: 12px;"
+      qwenExpandButton.className = 'btn btn-default expand-btn';
+      qwenExpandButton.dataset.target = `qwenDetails${index}`;
+      qwenExpandButton.textContent = '查看';
+      qwenCell.appendChild(qwenExpandButton);
+      row.appendChild(qwenCell);
+        
+        
+     // 创建 GLM4 结果与原因 (可展开)
+      const glm4Cell = document.createElement('td');
+      const glm4Result = document.createElement('span');
+        glm4Result.style = "display: flex;justify-content: center;"
+      glm4Result.textContent = item['glm4_result'] || '';
+      glm4Cell.appendChild(glm4Result);
+        
+      // 创建 GLM4 原因 (可展开)
+      // const glm4ReasonCell = document.createElement('td');
+      const glm4ExpandButton = document.createElement('button');
+      glm4ExpandButton.type = 'button';
+      glm4ExpandButton.style = "width: 58px;margin-top: 12px;"
+      glm4ExpandButton.className = 'btn btn-default expand-btn';
+      glm4ExpandButton.dataset.target = `glm4Details${index}`;
+      glm4ExpandButton.textContent = '查看';
+      glm4Cell.appendChild(glm4ExpandButton);
+      row.appendChild(glm4Cell);
+        
+      
+      // 退回按钮
+      const backCell = document.createElement('td');
+      const backButton = document.createElement('button');
+      backButton.type = 'button';
+      backButton.className = 'btn btn-danger back-btn';
+      backButton.textContent = '退回';
+      // 添加 data 属性以触发模态窗口
+      // backButton.dataset.toggle = "modal";
+      // backButton.dataset.target = "#modal-default";
+
+      backCell.appendChild(backButton);
+      row.appendChild(backCell);
+        
+        
+      // 校验按钮
+      const verificatCell = document.createElement('td');
+      const verificatButton = document.createElement('button');
+      verificatButton.type = 'button';
+      verificatButton.className = 'btn btn-warning verificat-btn';
+      verificatButton.textContent = '校验';
+      
+      verificatCell.appendChild(verificatButton);
+      row.appendChild(verificatCell);
+        
+      // 将行添加到表格主体
+      tableBody.appendChild(row);
+
+      // 创建 Qwen 原因详细信息行
+      const qwenDetailsRow = document.createElement('tr');
+      qwenDetailsRow.id = `qwenDetails${index}`;
+      qwenDetailsRow.className = 'd-none details-row';
+      const qwenDetailsCell = document.createElement('td');
+      qwenDetailsCell.colSpan = 11; // 跨越所有列
+      qwenDetailsCell.textContent = item['qwen_reason'] || '没有相关记录！';
+      qwenDetailsRow.appendChild(qwenDetailsCell);
+      tableBody.appendChild(qwenDetailsRow, row.nextSibling);
+
+
+      // 创建 GLM4 原因详细信息行
+      const glm4DetailsRow = document.createElement('tr');
+      glm4DetailsRow.id = `glm4Details${index}`;
+      glm4DetailsRow.className = 'd-none details-row';
+      const glm4DetailsCell = document.createElement('td');
+      glm4DetailsCell.colSpan = 11; // 跨越所有列
+      glm4DetailsCell.textContent = item['glm4_reason'] || '没有相关记录！';
+      glm4DetailsRow.appendChild(glm4DetailsCell);
+      tableBody.appendChild(glm4DetailsRow, row.nextSibling);
+
+
+    });
+
+    // 绑定点击事件到所有 .expand-btn 按钮
+    $('.expand-btn').off('click').on('click', function (e) {
+      e.preventDefault();
+        console.log(' R123131231');
+      const target = $(this).data('target'); // 获取目标元素 ID
+      $('#' + target).toggleClass('d-none'); // 切换显示状态
+    });
+    // 绑定点击事件到模态窗口的确认按钮
+    $('.back-btn').off('click').on('click', function (e) {
+      e.preventDefault(); // 阻止默认行为
+
+      // 在这里执行退回逻辑，比如发送AJAX请求
+      // console.log(' Retreat action triggered ');
+
+      var myModal = new bootstrap.Modal(document.getElementById('modal-back'));
+      myModal.show();
+    });
+      
+    // 绑定点击事件到模态窗口的确认按钮
+    $('.verificat-btn').off('click').on('click', function (e) {
+      e.preventDefault(); // 阻止默认行为
+
+      // 在这里执行退回逻辑，比如发送AJAX请求
+      // console.log(' Retreat action triggered ');
+
+      var myModal = new bootstrap.Modal(document.getElementById('modal-verificat'));
+      myModal.show();
+    });
+  } catch (error) {
+    console.error('Error fetching the data:', error);
+  }
+};
+    
+
+    
+document.getElementById('filterProblemItems').onclick = async (e) => {
+  e.preventDefault(); // 阻止默认行为
+
+  // 获取文件输入元素
+  const selectElement = document.getElementById('selectFile');
+
+  // 获取被选中的 option 的值
+  const filename = selectElement.value;
+  console.log(filename);
+
+  // 构建查询字符串（如果需要传递参数）
+  const params = new URLSearchParams({
+    fileName: filename
+  });
+
+  try {
+    // 发送请求获取.xlsx文件列表
+    const response = await fetch(`/filterProblemItems?${params.toString()}`, {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    // 清空现有表格内容
+    const tableBody = document.querySelector('#dynamicTable tbody');
+    tableBody.innerHTML = '';
+
+    // 动态生成表格内容
+    data.forEach((item, index) => {
+      const row = document.createElement('tr');
+
+      // 创建标准列
+      ['report_id', 'obj_type', 'style_name', 'security_class', 'detail', 'result_record', 'result_score'].forEach(key => {
+        const cell = document.createElement('td');
+        cell.textContent = item[key] || '';
+        row.appendChild(cell);
+      });
+        
+        
+           // 创建 qwen 结果与原因 (可展开)
+      const qwenCell = document.createElement('td');
+      const qwenResult = document.createElement('span');
+        qwenResult.style = "display: flex;justify-content: center;"
+      qwenResult.textContent = item['qwen_result'] || '';
+      qwenCell.appendChild(qwenResult);
+
+      // 创建 Qwen 原因 (可展开)
+      // const qwenReasonCell = document.createElement('td');
+      const qwenExpandButton = document.createElement('button');
+      qwenExpandButton.type = 'button';
+        qwenExpandButton.style = "width: 58px;margin-top: 12px;"
+      qwenExpandButton.className = 'btn btn-default expand-btn';
+      qwenExpandButton.dataset.target = `qwenDetails${index}`;
+      qwenExpandButton.textContent = '查看';
+      qwenCell.appendChild(qwenExpandButton);
+      row.appendChild(qwenCell);
+        
+        
+     // 创建 GLM4 结果与原因 (可展开)
+      const glm4Cell = document.createElement('td');
+      const glm4Result = document.createElement('span');
+        glm4Result.style = "display: flex;justify-content: center;"
+      glm4Result.textContent = item['glm4_result'] || '';
+      glm4Cell.appendChild(glm4Result);
+        
+      // 创建 GLM4 原因 (可展开)
+      // const glm4ReasonCell = document.createElement('td');
+      const glm4ExpandButton = document.createElement('button');
+      glm4ExpandButton.type = 'button';
+      glm4ExpandButton.style = "width: 58px;margin-top: 12px;"
+      glm4ExpandButton.className = 'btn btn-default expand-btn';
+      glm4ExpandButton.dataset.target = `glm4Details${index}`;
+      glm4ExpandButton.textContent = '查看';
+      glm4Cell.appendChild(glm4ExpandButton);
+      row.appendChild(glm4Cell);
+        
+      
+      // 退回按钮
+      const backCell = document.createElement('td');
+      const backButton = document.createElement('button');
+      backButton.type = 'button';
+      backButton.className = 'btn btn-danger back-btn';
+      backButton.dataset.target = `glm4Details${index}`;
+      backButton.textContent = '退回';
+      backCell.appendChild(backButton);
+      row.appendChild(backCell);
+        
+        
+      // 校验按钮
+      const verificatCell = document.createElement('td');
+      const verificatButton = document.createElement('button');
+      verificatButton.type = 'button';
+      verificatButton.className = 'btn btn-warning verificat-btn';
+      verificatButton.dataset.target = `glm4Details${index}`;
+      verificatButton.textContent = '校验';
+      verificatCell.appendChild(verificatButton);
+      row.appendChild(verificatCell);
+        
+      // 将行添加到表格主体
+      tableBody.appendChild(row);
+
+      // 创建 Qwen 原因详细信息行
+      const qwenDetailsRow = document.createElement('tr');
+      qwenDetailsRow.id = `qwenDetails${index}`;
+      qwenDetailsRow.className = 'd-none details-row';
+      const qwenDetailsCell = document.createElement('td');
+      qwenDetailsCell.colSpan = 11; // 跨越所有列
+      qwenDetailsCell.textContent = item['qwen_reason'] || '没有相关记录！';
+      qwenDetailsRow.appendChild(qwenDetailsCell);
+      tableBody.appendChild(qwenDetailsRow, row.nextSibling);
+
+
+      // 创建 GLM4 原因详细信息行
+      const glm4DetailsRow = document.createElement('tr');
+      glm4DetailsRow.id = `glm4Details${index}`;
+      glm4DetailsRow.className = 'd-none details-row';
+      const glm4DetailsCell = document.createElement('td');
+      glm4DetailsCell.colSpan = 11; // 跨越所有列
+      glm4DetailsCell.textContent = item['glm4_reason'] || '没有相关记录！';
+      glm4DetailsRow.appendChild(glm4DetailsCell);
+      tableBody.appendChild(glm4DetailsRow, row.nextSibling);
+
+
+    });
+
+    // 绑定点击事件到所有 .expand-btn 按钮
+    $('.expand-btn').off('click').on('click', function (e) {
+      e.preventDefault();
+      const target = $(this).data('target'); // 获取目标元素 ID
+      $('#' + target).toggleClass('d-none'); // 切换显示状态
+    });
+    // 绑定点击事件到模态窗口的确认按钮
+    $('.back-btn').off('click').on('click', function (e) {
+      e.preventDefault(); // 阻止默认行为
+
+      // 在这里执行退回逻辑，比如发送AJAX请求
+      // console.log(' Retreat action triggered ');
+
+      var myModal = new bootstrap.Modal(document.getElementById('modal-back'));
+      myModal.show();
+    });
+      
+    // 绑定点击事件到模态窗口的确认按钮
+    $('.verificat-btn').off('click').on('click', function (e) {
+      e.preventDefault(); // 阻止默认行为
+
+      // 在这里执行退回逻辑，比如发送AJAX请求
+      // console.log(' Retreat action triggered ');
+
+      var myModal = new bootstrap.Modal(document.getElementById('modal-verificat'));
+      myModal.show();
+    });
+  } catch (error) {
+    console.error('Error fetching the data:', error);
+  }
+};
+</script>
+
+<style>
+
+</style>
+{% endblock javascripts %}
